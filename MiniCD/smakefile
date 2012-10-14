@@ -1,0 +1,48 @@
+#
+# Makefile for GadToolsBox.lib by Tomasz Muszynski
+#
+
+all: MiniCD
+
+VERSION = 1
+REVISION = 0
+
+OPTIONS = 
+PUBSCREEN = SASPRJ.1
+
+MiniCD: main.o scsi.o
+  slink <WITH <
+TO MiniCD
+FROM lib:c.o main.o scsi.o
+LIB lib:sc.lib lib:amiga.lib lib:gadtoolsbox.lib
+SD
+SC
+<
+#ND
+
+###########################
+# Dependences
+
+main.o: main.c
+  sc main.c
+scsi.o: scsi.c
+  sc scsi.c
+
+###########################
+# Other
+
+# Run it
+run:
+  @-MiniCD
+
+# debug it
+cpr:
+  @-cpr -screen $(PUBSCREEN) WndTest
+
+#open ProjectMan
+edit:
+  @-ProjectMan
+  @-ed main.c
+
+install:
+  @-copy MiniCD SYS:WBStartup
